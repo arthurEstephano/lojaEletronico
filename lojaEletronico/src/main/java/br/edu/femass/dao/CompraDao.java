@@ -30,6 +30,20 @@ public class CompraDao extends DaoPostgres implements Dao<Compra>{
         return compras;
     }
 
+    public Float consultarValor (java.util.Date data) throws Exception {
+        String sql = "SELECT" +
+                "compra.valor_total AS valor_total, " +
+                "WHERE compra.data BETWEEN ' " + data + " 00:00:00 " +
+                "AND " + data + "23:59:59";
+
+        PreparedStatement ps = getPreparedStatement(sql, true);
+        ResultSet rs = ps.executeQuery();
+
+        Compra compra = new Compra();
+        compra.setValorTotal(rs.getFloat("valor_total"));
+
+        return compra.getValorTotal();
+    }
     @Override
     public void gravar(Compra value) throws Exception {
         Connection conexao = getConexao();

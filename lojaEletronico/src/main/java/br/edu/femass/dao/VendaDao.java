@@ -1,9 +1,7 @@
 package br.edu.femass.dao;
 
 
-import br.edu.femass.model.Venda;
-import br.edu.femass.model.ItemVenda;
-import br.edu.femass.model.Produto;
+import br.edu.femass.model.*;
 import br.edu.femass.model.Venda;
 
 import java.sql.*;
@@ -33,6 +31,20 @@ public class VendaDao extends DaoPostgres implements Dao<Venda>{
         return vendas;
     }
 
+    public Float consultarValor (java.util.Date data) throws Exception {
+        String sql = "SELECT" +
+                "venda.valor_total AS valor_total, " +
+                "WHERE venda.data BETWEEN ' " + data + " 00:00:00 " +
+                "AND " + data + "23:59:59";
+
+        PreparedStatement ps = getPreparedStatement(sql, true);
+        ResultSet rs = ps.executeQuery();
+
+        Venda venda = new Venda();
+        venda.setValorTotal(rs.getFloat("valor_total"));
+
+        return venda.getValorTotal();
+    }
     @Override
     public void gravar(Venda value) throws Exception {
         Connection conexao = getConexao();
