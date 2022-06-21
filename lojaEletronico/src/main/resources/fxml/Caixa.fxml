@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.femass.controller.ProdutoController">
+    <children>
+        <Pane minHeight="155.0" minWidth="225.0" prefHeight="155.0" prefWidth="225.0">
+            <children>
+                <Button fx:id="BtnIncluir" layoutX="67.0" layoutY="93.0" mnemonicParsing="false" onAction="#BtnIncluir_Action" prefHeight="36.0" prefWidth="92.0" text="Fechar Caixa" />
+            <Text layoutX="7.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data do caixa" />
+            <TextField fx:id="TxtQtd" layoutX="91.0" layoutY="38.0" prefHeight="25.0" prefWidth="112.0" />
+            </children>
+        </Pane>
+    </children>
+</HBox>
