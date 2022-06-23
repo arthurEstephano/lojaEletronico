@@ -4,7 +4,7 @@ import java.sql.*;
 
 public abstract class DaoPostgres {
     protected static String ENDERECO = "localhost";
-    protected static String BD = "lojaEletronico";
+    protected static String BD = "eletronico";
     protected static String PORTA = "5432";
     protected static String USUARIO = "postgres";
     protected static String SENHA = "postgres";

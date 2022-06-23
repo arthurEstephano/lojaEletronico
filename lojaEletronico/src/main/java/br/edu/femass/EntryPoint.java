@@ -20,7 +20,7 @@ public class EntryPoint extends Application {
         scene.getStylesheets().add("/styles/Styles.css");
         scene.getRoot().setStyle("-fx-font-family: 'serif'");
 
-        stage.setTitle("Sistema de Biblioteca");
+        stage.setTitle("Sistema de Loja de Produtos Eletrônicos");
         stage.setScene(scene);
         stage.show();
     }

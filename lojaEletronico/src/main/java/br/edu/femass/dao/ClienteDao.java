@@ -12,11 +12,11 @@ import java.util.List;
 public class ClienteDao extends DaoPostgres implements Dao<Cliente>{
     @Override
     public List<Cliente> listar() throws Exception {
-        String sql = "select " +
-                "cliente.id as id, " +
-                "cliente.nome as nome, " +
-                "cliente.cpf as cpf, " +
-                "order by cliente.nome asc";
+        String sql = "SELECT " +
+                "cliente.id AS id, " +
+                "cliente.nome AS nome, " +
+                "cliente.cpf AS cpf, " +
+                "ORDER BY cliente.nome asc";
         PreparedStatement ps = getPreparedStatement(sql, false);
         ResultSet rs = ps.executeQuery();
 
@@ -49,7 +49,7 @@ public class ClienteDao extends DaoPostgres implements Dao<Cliente>{
 
     @Override
     public void alterar(Cliente value) throws Exception {
-        String sql = "update cliente set nome = ?, cpf = ? where id = ?";
+        String sql = "UPDATE cliente SET nome = ?, cpf = ? WHERE id = ?";
         PreparedStatement ps = getPreparedStatement(sql, false);
         ps.setString(1, value.getNome());
         ps.setString(2, value.getCpf());
@@ -62,7 +62,7 @@ public class ClienteDao extends DaoPostgres implements Dao<Cliente>{
         Connection conexao = getConexao();
         conexao.setAutoCommit(false);
         try {
-            String sql = "delete from cliente where id = ?";
+            String sql = "DELETE FROM cliente WHERE id = ?";
             PreparedStatement ps1 = conexao.prepareStatement(sql);
             ps1.setLong(1, value.getId());
             ps1.executeUpdate();

@@ -24,19 +24,44 @@ public class MainController implements Initializable {
     private Button BtnProdutos;
 
     @FXML
-    private void BtnClientes_Action(ActionEvent evento) {
-        abrirTela("Cliente", "Clientes");
-    }
+    private Button BtnCaixa;
+
+    @FXML
+    private Button BtnCompra;
+
+    @FXML
+    private Button BtnVenda;
+
+    @FXML
+    private Button BtnEstoque;
+
+
+    @FXML
+    private void BtnClientes_Action(ActionEvent evento) {abrirTela("Clientes", "Cadastro de Clientes");}
 
     @FXML
     private void BtnFornecedores_Action(ActionEvent evento) {
-        abrirTela("Fornecedor", "Fornecedores");
+        abrirTela("Fornecedores", "Cadastro de Fornecedores");
     }
 
     @FXML
     private void BtnProdutos_Action(ActionEvent evento) {
-        abrirTela("Produto", "Produtos");
+        abrirTela("Produto", "Cadastro de Produtos");
     }
+
+    @FXML
+    private void BtnCaixa_Action(ActionEvent evento) {abrirTela("Caixa", "Consulta de caixa");}
+
+    @FXML
+    private void BtnCompra_Action(ActionEvent evento) {
+        abrirTela("Compra", "Efetivação de Compras");
+    }
+
+    @FXML
+    private void BtnVenda_Action(ActionEvent evento) {abrirTela("Venda", "Efetivação de Vendas");}
+
+    @FXML
+    private void BtnEstoque_Action(ActionEvent evento) {abrirTela("Estoque", "Consulta de Estoque");}
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
