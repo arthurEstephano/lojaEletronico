@@ -4,20 +4,19 @@ import br.edu.femass.dao.CompraDao;
 import br.edu.femass.dao.VendaDao;
 import lombok.Data;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 public class Caixa {
     private Date data;
     private List<Operacao> operacoes= new ArrayList<>();
-    private Float total;
+    private Float total = 0F;
 
 
-    public Caixa (Date data){this.data = data; this.total = 0F;}
 
-    public String fecharCaixa(Date data){
+    public void fecharCaixa(String data){
 
         Operacao opCompra = new Operacao();
         opCompra.setTipo(TipoOperacao.COMPRA);
@@ -43,6 +42,5 @@ public class Caixa {
                 this.total = this.total + op.getValor();
             }
         }
-        return "O caixa do dia " + this.getData().toString() + " fechou em: R$ " + this.getTotal().toString();
     }
 }

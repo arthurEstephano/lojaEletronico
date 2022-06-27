@@ -60,7 +60,7 @@ public class ClienteController implements Initializable {
         Cliente cliente = LstClientes.getSelectionModel().getSelectedItem();
         if (cliente==null) return;
         TxtNome.setText(cliente.getNome());
-        TxtCpf.setText(cliente.getCpf().toString());
+        TxtCpf.setText(cliente.getCpf());
     }
 
     @FXML
@@ -149,6 +149,7 @@ public class ClienteController implements Initializable {
 
 
     private void atualizarLista() {
+        BtnGravar.setText("Gravar");
         List<Cliente> clientes;
         try {
             clientes = clienteDao.listar();

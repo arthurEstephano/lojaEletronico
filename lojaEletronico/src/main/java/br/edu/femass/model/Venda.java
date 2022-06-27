@@ -14,7 +14,7 @@ public class Venda {
 
     private Date data;
 
-    private Float valorTotal;
+    private Float valorTotal = 0F;
 
     private List<ItemVenda> itensVendidos = new ArrayList<>();
     private Cliente cliente;

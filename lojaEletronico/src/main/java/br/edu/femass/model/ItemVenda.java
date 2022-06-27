@@ -14,4 +14,5 @@ public class ItemVenda {
     @Override
     public String toString() {return this.produto.getNome() + "; Preço compra: " + this.getPrecoVenda() +
             "; Quantidade: " + this.getQtd();}
+
 }

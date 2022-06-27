@@ -32,8 +32,6 @@ public class MainController implements Initializable {
     @FXML
     private Button BtnVenda;
 
-    @FXML
-    private Button BtnEstoque;
 
 
     @FXML
@@ -60,8 +58,6 @@ public class MainController implements Initializable {
     @FXML
     private void BtnVenda_Action(ActionEvent evento) {abrirTela("Venda", "Efetivação de Vendas");}
 
-    @FXML
-    private void BtnEstoque_Action(ActionEvent evento) {abrirTela("Estoque", "Consulta de Estoque");}
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

@@ -12,11 +12,7 @@ import java.util.List;
 public class ClienteDao extends DaoPostgres implements Dao<Cliente>{
     @Override
     public List<Cliente> listar() throws Exception {
-        String sql = "SELECT " +
-                "cliente.id AS id, " +
-                "cliente.nome AS nome, " +
-                "cliente.cpf AS cpf, " +
-                "ORDER BY cliente.nome asc";
+        String sql = "SELECT * FROM cliente ORDER BY nome";
         PreparedStatement ps = getPreparedStatement(sql, false);
         ResultSet rs = ps.executeQuery();
 

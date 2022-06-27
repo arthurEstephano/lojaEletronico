@@ -4,17 +4,16 @@ import br.edu.femass.model.*;
 import br.edu.femass.model.Compra;
 
 import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CompraDao extends DaoPostgres implements Dao<Compra>{
+    private final ProdutoDao produtoDao = new ProdutoDao();
     @Override
     public List<Compra> listar() throws Exception {
-        String sql = "select " +
-                "compra.id as id, " +
-                "compra.valor_total as valor_total, " +
-                "compra.data as data, " +
-                "order by cliente.data asc";
+        String sql = "select * from compra order by data desc";
         PreparedStatement ps = getPreparedStatement(sql, true);
         ResultSet rs = ps.executeQuery();
 
@@ -30,28 +29,50 @@ public class CompraDao extends DaoPostgres implements Dao<Compra>{
         return compras;
     }
 
-    public Float consultarValor (java.util.Date data) throws Exception {
-        String sql = "SELECT" +
-                "compra.valor_total AS valor_total, " +
-                "WHERE compra.data BETWEEN ' " + data + " 00:00:00 " +
-                "AND " + data + "23:59:59";
+    public List<ItemCompra> listarItemCompra(Produto produto) throws Exception {
+        String sql = "select * from item_compra where id_produto = ?";
+        PreparedStatement ps = getPreparedStatement(sql, true);
+        ResultSet rs = ps.executeQuery();
+
+        List<ItemCompra> itemCompras = new ArrayList<>();
+
+        while (rs.next()) {
+            ItemCompra itemCompra = new ItemCompra();
+            itemCompra.setQtd(rs.getInt("qtd"));
+            itemCompra.setId(rs.getLong("id"));
+            itemCompra.setPrecoCompra(rs.getFloat("preco_compra"));
+            itemCompra.setProduto(produto);
+
+            itemCompras.add(itemCompra);
+        }
+        return itemCompras;
+    }
+
+    public Float consultarValor (String data) throws Exception {
+        String sql = "SELECT * FROM compra WHERE data = '" + data + "'";
 
         PreparedStatement ps = getPreparedStatement(sql, true);
         ResultSet rs = ps.executeQuery();
 
-        Compra compra = new Compra();
-        compra.setValorTotal(rs.getFloat("valor_total"));
+        Float totalComprado = 0F;
 
-        return compra.getValorTotal();
+        while (rs.next()) {
+            totalComprado = totalComprado + rs.getFloat("valor_total");
+
+        }
+
+        return totalComprado;
     }
     @Override
     public void gravar(Compra value) throws Exception {
         Connection conexao = getConexao();
         conexao.setAutoCommit(false);
+
+        String date = LocalDateTime.now().getYear() + "-" + LocalDateTime.now().getMonthValue() + "-" + LocalDateTime.now().getDayOfMonth();
         try {
             String sql = "INSERT INTO compra (data, valor_total, id_fornecedor) VALUES (?,?,?)";
             PreparedStatement ps = getPreparedStatement(sql, true);
-            ps.setDate(1, (Date) value.getData());
+            ps.setDate(1, Date.valueOf(date));
             ps.setFloat(2, value.getValorTotal());
             ps.setLong(3, value.getFornecedor().getId());
 
@@ -62,7 +83,7 @@ public class CompraDao extends DaoPostgres implements Dao<Compra>{
             value.setId(rs.getLong(1));
 
             for (ItemCompra itemComprado: value.getItensComprados()) {
-                sql = "INSERT INTO item_compra (qtd, preco_venda, id_compra, id_produto) VALUES (?,?,?,?)";
+                sql = "INSERT INTO item_compra (qtd, preco_compra, id_compra, id_produto) VALUES (?,?,?,?)";
                 PreparedStatement ps2 = getPreparedStatement(sql, true);
                 ps2.setInt(1, itemComprado.getQtd());
                 ps2.setFloat(2, itemComprado.getPrecoCompra());
@@ -71,14 +92,9 @@ public class CompraDao extends DaoPostgres implements Dao<Compra>{
 
                 ps2.executeUpdate();
 
-                ResultSet rs2 = ps.getGeneratedKeys();
-                rs2.next();
-                itemComprado.setId(rs2.getLong(1));
-
-                ProdutoDao produtoDao = new ProdutoDao();
-                produtoDao.alterar(itemComprado.getQtd(), itemComprado.getProduto());
-
+                produtoDao.alterarProdutoCompra(itemComprado);
             }
+            conexao.commit();
         } catch (SQLException exception) {
             conexao.rollback();
             throw exception;

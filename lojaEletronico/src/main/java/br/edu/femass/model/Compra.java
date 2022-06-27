@@ -11,7 +11,7 @@ public class Compra {
 
     private Long id;
     private Date data;
-    private Float valorTotal;
+    private Float valorTotal = 0F;
     private List<ItemCompra> itensComprados = new ArrayList<>();
     private Fornecedor fornecedor;
 

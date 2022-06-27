@@ -12,29 +12,25 @@ import java.util.List;
 public class FornecedorDao extends DaoPostgres implements Dao<Fornecedor>{
     @Override
     public List<Fornecedor> listar() throws Exception {
-        String sql = "select " +
-                "cliente.id as id, " +
-                "cliente.nome as nome, " +
-                "cliente.cnpj as cnpj, " +
-                "order by cliente.nome asc";
+        String sql = "SELECT * FROM fornecedor ORDER BY nome";
         PreparedStatement ps = getPreparedStatement(sql, false);
         ResultSet rs = ps.executeQuery();
 
         List<Fornecedor> forncededores = new ArrayList<>();
 
         while (rs.next()) {
-            Fornecedor cliente = new Fornecedor();
-            cliente.setNome(rs.getString("nome"));
-            cliente.setId(rs.getLong("id"));
-            cliente.setCnpj(rs.getString("cnpj"));
-            forncededores.add(cliente);
+            Fornecedor fornecedor = new Fornecedor();
+            fornecedor.setNome(rs.getString("nome"));
+            fornecedor.setId(rs.getLong("id"));
+            fornecedor.setCnpj(rs.getString("cnpj"));
+            forncededores.add(fornecedor);
         }
         return forncededores;
     }
 
     @Override
     public void gravar(Fornecedor value) throws Exception {
-        String sql = "INSERT INTO cliente (nome, cnpj) VALUES (?,?)";
+        String sql = "INSERT INTO fornecedor (nome, cnpj) VALUES (?,?)";
         PreparedStatement ps = getPreparedStatement(sql, true);
         ps.setString(1, value.getNome());
         ps.setString(2, value.getCnpj());
@@ -49,7 +45,7 @@ public class FornecedorDao extends DaoPostgres implements Dao<Fornecedor>{
 
     @Override
     public void alterar(Fornecedor value) throws Exception {
-        String sql = "update cliente set nome = ?, cnpj = ? where id = ?";
+        String sql = "update fornecedor set nome = ?, cnpj = ? where id = ?";
         PreparedStatement ps = getPreparedStatement(sql, false);
         ps.setString(1, value.getNome());
         ps.setString(2, value.getCnpj());
@@ -62,7 +58,7 @@ public class FornecedorDao extends DaoPostgres implements Dao<Fornecedor>{
         Connection conexao = getConexao();
         conexao.setAutoCommit(false);
         try {
-            String sql = "delete from cliente where id = ?";
+            String sql = "delete from fornecedor where id = ?";
             PreparedStatement ps1 = conexao.prepareStatement(sql);
             ps1.setLong(1, value.getId());
             ps1.executeUpdate();

@@ -14,12 +14,7 @@ import java.util.List;
 public class ProdutoDao extends DaoPostgres implements Dao<Produto>{
     @Override
     public List<Produto> listar() throws Exception {
-        String sql = "select " +
-                "produto.id as id, " +
-                "produto.nome as nome, " +
-                "produto.preco_venda as preco_venda, " +
-                "produto.estoque as estoque, " +
-                "order by produto.nome asc";
+        String sql = "select * from produto order by id";
         PreparedStatement ps = getPreparedStatement(sql, false);
         ResultSet rs = ps.executeQuery();
 
@@ -53,7 +48,7 @@ public class ProdutoDao extends DaoPostgres implements Dao<Produto>{
 
     @Override
     public void alterar(Produto value) throws Exception {
-        String sql = "update produto set nome = ?, preco_venda = ?, estoque = ?  where id = ?";
+        String sql = "UPDATE produto set nome = ? where id = ?";
         PreparedStatement ps = getPreparedStatement(sql, false);
         ps.setString(1, value.getNome());
         ps.setFloat(2, value.getPrecoVenda());
@@ -61,19 +56,21 @@ public class ProdutoDao extends DaoPostgres implements Dao<Produto>{
         ps.executeUpdate();
     }
 
-    public void alterar(Object t, Produto value) throws Exception {
-        String sql = "update produto set estoque = ? where id = ?";
+    public void alterarProdutoVenda(ItemVenda value) throws Exception {
+        String sql = "UPDATE produto SET estoque = ?, preco_venda = ? WHERE id = ?";
         PreparedStatement ps = getPreparedStatement(sql, false);
-        int estoque = value.getEstoque();
-        if(t instanceof ItemVenda) {
-            if(((ItemVenda) t).getQtd() > value.getEstoque()){
-                return;
-            }
-            ps.setInt(1, (estoque - ((ItemVenda) t).getQtd()));
-        }
-        else {
-            ps.setInt(1, (estoque + ((ItemCompra) t).getQtd()));
-        }
+        Integer conta = value.getProduto().getEstoque() - value.getQtd();
+        ps.setInt(1,  conta);
+        ps.setFloat(2, value.getPrecoVenda());
+        ps.setLong(3, value.getProduto().getId());
+        ps.executeUpdate();
+    }
+
+    public void alterarProdutoCompra(ItemCompra value) throws Exception {
+        String sql = "UPDATE produto SET estoque = ? WHERE id = ?";
+        PreparedStatement ps = getPreparedStatement(sql, false);
+        ps.setInt(1,  (value.getProduto().getEstoque() + value.getQtd()));
+        ps.setLong(2, value.getProduto().getId());
         ps.executeUpdate();
     }
 
@@ -82,7 +79,7 @@ public class ProdutoDao extends DaoPostgres implements Dao<Produto>{
         Connection conexao = getConexao();
         conexao.setAutoCommit(false);
         try {
-            String sql = "delete from produto where id = ?";
+            String sql = "DELETE FROM produto WHERE id = ?";
             PreparedStatement ps1 = conexao.prepareStatement(sql);
             ps1.setLong(1, value.getId());
             ps1.executeUpdate();
